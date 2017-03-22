@@ -7,10 +7,10 @@
     this APP; customization should be easy.
     You can download the TTC csv files from this URL:
     http://opendata.toronto.ca/TTC/routes/OpenData_TTC_Schedules.zip
-    import the csv files to phpmyadmin.  This utility below can
-    import large csv files to mysql. Download it, and it should be
-    pretty straight forward.
-    https://github.com/sanathp/largeCSV2mySQL
+    
+    This App will create the database and tables, and import the csv
+    files to their respective tables.
+    https://github.com/r2tigerwolf/ttc_dump
     ********************************************************************/
 ?>
 <?php 
