@@ -12,9 +12,9 @@
     } 
    
     class Bus {
-		private $result;
-		
-		public function select($conn, $row, $table, $join, $where, $sort, $limit) {
+        private $result;
+        
+        public function select($conn, $row, $table, $join, $where, $sort, $limit) {
         
             $sql = 'SELECT ' . $row . ' FROM `' . $table . '` ' . $join . ' WHERE ' . $where . ' ' . $sort . ' ' . $limit;
         
