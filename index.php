@@ -13,7 +13,7 @@
     https://github.com/sanathp/largeCSV2mySQL
     ********************************************************************/
 ?>
-<?php
+<?php 
     include("db.class.php");
     $memcache = new Memcache();
     $memcache->connect('localhost', 11211) or die ("Could not connect");
@@ -24,11 +24,13 @@
         <input type="submit" value="Find Bus" />
     </form>
 
-<?php
+<?php 
     $conn = new Connect();
-    $conn->dbconnect();
-    $bus = new Bus; 
     
+    $busConn = $conn->dbconnect();
+    
+    $bus = new Bus; 
+       
     $route_cache_result = array();
     $trips_cache_result = array();
     
@@ -49,12 +51,12 @@
             $order = 'ORDER BY route_short_name DESC';
             $limit = 'LIMIT 500';
             
-            $routeResult = $bus->select($rows, $table, $join, $where, $order, $limit); 
+            $routeResult = $bus->select($busConn, $rows, $table, $join, $where, $order, $limit); 
             
             foreach($routeResult  as $key => $val) {				
                 $route_result[$key] = $val;
             }
-            
+   
             $memcache->set('route_'.$_POST['route_name'], $route_result, MEMCACHE_COMPRESSED, 100);
             
             echo "<br/>this is NOT cached<br/>";
@@ -87,7 +89,7 @@
             $order = '';
             $limit = 'LIMIT 500';
             
-            $tripsResult = $bus->select($rows, $table, $join, $where , $order, $limit);
+            $tripsResult = $bus->select($busConn, $rows, $table, $join, $where , $order, $limit);
             
             foreach($tripsResult  as $key => $val) {				
                 $trips_result[$key] = $val;

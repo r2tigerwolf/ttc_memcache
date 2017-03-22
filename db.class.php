@@ -5,53 +5,39 @@
         private $db_password = '';
         private $db_db = 'ttc';
     
-        function dbconnect(){
-            $conn = mysql_connect($this->db_host, $this->db_user, $this->db_password)
-                or die ("<br/>Could not connect to MySQL server");
-             
-            mysql_select_db($this->db_db, $conn)
-                or die ("<br/>Could not select the indicated database");
-            
+        function dbconnect(){           
+            $conn = mysqli_connect($this->db_host, $this->db_user, $this->db_password, $this->db_db);
             return $conn;
         }
     } 
    
     class Bus {
-        public function select($row, $table, $join, $where, $sort, $limit) {   
+		private $result;
+		
+		public function select($conn, $row, $table, $join, $where, $sort, $limit) {
+        
             $sql = 'SELECT ' . $row . ' FROM `' . $table . '` ' . $join . ' WHERE ' . $where . ' ' . $sort . ' ' . $limit;
+        
+            $result =  $conn->query($sql);
+            $keyResult = $conn->query($sql);
+            $busInfo = array_keys($keyResult->fetch_assoc());
             
-            echo $sql;  // This is to display the join. For debuging
-            
-            $query = mysql_query($sql);
-
-            if($query)
-            {
-                $this->numResults = mysql_num_rows($query);
+            if($result->num_rows) { 
+                $i = 0;
                 
-                for($i = 0; $i < $this->numResults; $i++)
-                {
-                    $result = mysql_fetch_array($query);
-                    $key = array_keys($result); 
-                    for($x = 0; $x < count($key); $x++)
-                    {
-                        // Sanitizes keys so only alphavalues are allowed
-                        if(!is_int($key[$x]))
-                        {
-                            if(mysql_num_rows($query) > 1)
-                                $this->result[$i][$key[$x]] = $result[$key[$x]];
-                            else if(mysql_num_rows($query) < 1)
-                                $this->result = null; 
-                            else
-                                $this->result[$key[$x]] = $r[$key[$x]]; 
-                        }
+                while ($bus = $result->fetch_assoc()) {
+                    for($j = 0; $j < count($busInfo); $j++) {
+                        $this->result[$i][$busInfo[$j]] = $bus[$busInfo[$j]];
                     }
-                }            
+                    $i++;
+                }
+      
                 return $this->result; 
             }
-            else
-            {
+            else {
                 return false; 
             }
+            mysqli_close($con);
         }
     }
 ?>
