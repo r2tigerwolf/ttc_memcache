@@ -6,7 +6,7 @@
     There is no styling, Javascript, or any security feature in 
     this APP; customization should be easy.
     You can download the TTC csv files from this URL:
-    https://developers.google.com/transit/gtfs/examples/gtfs-feed
+    http://opendata.toronto.ca/TTC/routes/OpenData_TTC_Schedules.zip
     import the csv files to phpmyadmin.  This utility below can
     import large csv files to mysql. Download it, and it should be
     pretty straight forward.
