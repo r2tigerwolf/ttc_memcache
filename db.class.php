@@ -14,12 +14,15 @@
     class Bus {
         private $result;
         
-        public function select($conn, $row, $table, $join, $where, $sort, $limit) {
+        public function select($sqlArray) {
+            if($sqlArray['where']) {
+                $sqlArray['where'] = ' WHERE ' . $sqlArray['where'];
+            }
+            
+            $sql = 'SELECT ' . $sqlArray['rows'] . ' FROM `' . $sqlArray['table'] . '` ' . $join . $sqlArray['where'] . ' ' . $sqlArray['join'] . ' ' . $sqlArray['limit'];
         
-            $sql = 'SELECT ' . $row . ' FROM `' . $table . '` ' . $join . ' WHERE ' . $where . ' ' . $sort . ' ' . $limit;
-        
-            $result =  $conn->query($sql);
-            $keyResult = $conn->query($sql);
+            $result =  $sqlArray['conn']->query($sql);
+            $keyResult = $sqlArray['conn']->query($sql);
             $busInfo = array_keys($keyResult->fetch_assoc());
             
             if($result->num_rows) { 

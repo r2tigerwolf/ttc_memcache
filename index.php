@@ -44,21 +44,10 @@
             $route_result = $route_cache_result;
             echo "<br/>this is cached<br/>";
         } else {
-            $rows = '*';
-            $table = 'bus_view'; // view
-            $join = '';
-            $where = 'route_long_name like "%'.$_POST["route_name"].'%"';
-            $order = 'ORDER BY route_short_name DESC';
-            $limit = 'LIMIT 500';
             
+            $sqlArray = array('conn' => $busConn, 'rows' => '*', 'table' => 'bus_view', 'join' => '', 'where' => 'route_long_name like "%'.$_POST["route_name"].'%"', 'order' => 'ORDER BY route_short_name DESC', 'limit' => 'LIMIT 500');            
             $routeResult = $bus->select($busConn, $rows, $table, $join, $where, $order, $limit); 
-            
-            foreach($routeResult  as $key => $val) {				
-                $route_result[$key] = $val;
-            }
-   
-            $memcache->set('route_'.$_POST['route_name'], $route_result, MEMCACHE_COMPRESSED, 100);
-            
+            $memcache->set('route_'.$_POST['route_name'], $routeResult, MEMCACHE_COMPRESSED, 100);            
             echo "<br/>this is NOT cached<br/>";
         }
     
@@ -66,7 +55,7 @@
     
         echo '<ul id="route">';
         
-        foreach($route_result  as $key => $val) {
+        foreach($routeResult  as $key => $val) {
             echo '<li><a href = "' .$_SERVER['PHP_SELF'] . '?route=' . $val['route_id'] . '&routename=' . $val['route_long_name'] . '">' . $val['route_long_name'] . ' ' . $val['route_short_name'] . '</a></li>';  
         }
     
@@ -82,21 +71,9 @@
             $trips_result = $trips_cache_result;
             echo "<br/>this is cached<br/>";
         } else {
-            $rows = '*';
-            $table = 'route_view'; // view
-            $join = '';
-            $where = 'route_id = "'.$_GET['route'].'"';
-            $order = '';
-            $limit = 'LIMIT 500';
-            
-            $tripsResult = $bus->select($busConn, $rows, $table, $join, $where , $order, $limit);
-            
-            foreach($tripsResult  as $key => $val) {				
-                $trips_result[$key] = $val;
-            }
-            
-            // Key, Array, Compressed, seconds
-            $memcache->set('trips_'.$_GET['route'], $trips_result, MEMCACHE_COMPRESSED, 100);
+            $sqlArray = array('conn' => $busConn, 'rows' => '*', 'table' => 'route_view', 'join' => '', 'where' => 'route_id = "'.$_GET['route'].'"', 'order' => '', 'limit' => 'LIMIT 500');
+            $tripsResult = $bus->select($sqlArray);
+            $memcache->set('trips_'.$_GET['route'], $tripsResult, MEMCACHE_COMPRESSED, 100);
             
             echo "<br/>this is NOT cached<br/>";
         }
@@ -104,7 +81,7 @@
         //$memcache->flush(0);
         
         echo '<ul id="trips">';
-        foreach($trips_result as $key => $val) {
+        foreach($tripsResult as $key => $val) {
             echo '<li>';
             echo $val['route_long_name']. ', Bus Name: ' . $val['trip_headsign'] . ', Arrive at: ' . 
             date("g:i A", strtotime($val['arrival_time'])) . ', Depart at: ' . 
