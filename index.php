@@ -46,12 +46,12 @@
         } else {
             
             $sqlArray = array('conn' => $busConn, 'rows' => '*', 'table' => 'bus_view', 'join' => '', 'where' => 'route_long_name like "%'.$_POST["route_name"].'%"', 'order' => 'ORDER BY route_short_name DESC', 'limit' => 'LIMIT 500');            
-            $routeResult = $bus->select($busConn, $rows, $table, $join, $where, $order, $limit); 
+            $routeResult = $bus->select($sqlArray); 
             $memcache->set('route_'.$_POST['route_name'], $routeResult, MEMCACHE_COMPRESSED, 100);            
             echo "<br/>this is NOT cached<br/>";
         }
     
-        //$memcache->flush(0);
+        $memcache->flush(0);
     
         echo '<ul id="route">';
         
@@ -78,7 +78,7 @@
             echo "<br/>this is NOT cached<br/>";
         }
         
-        //$memcache->flush(0);
+        $memcache->flush(0);
         
         echo '<ul id="trips">';
         foreach($tripsResult as $key => $val) {

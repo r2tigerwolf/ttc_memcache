@@ -19,7 +19,7 @@
                 $sqlArray['where'] = ' WHERE ' . $sqlArray['where'];
             }
             
-            $sql = 'SELECT ' . $sqlArray['rows'] . ' FROM `' . $sqlArray['table'] . '` ' . $join . $sqlArray['where'] . ' ' . $sqlArray['join'] . ' ' . $sqlArray['limit'];
+            $sql = 'SELECT ' . $sqlArray['rows'] . ' FROM `' . $sqlArray['table'] . '` ' . $sqlArray['join'] . $sqlArray['where'] . ' ' . $sqlArray['join'] . ' ' . $sqlArray['limit'];
         
             $result =  $sqlArray['conn']->query($sql);
             $keyResult = $sqlArray['conn']->query($sql);
@@ -35,12 +35,13 @@
                     $i++;
                 }
       
-                return $this->result; 
+                return $this->result;
+                mysqli_close($con); 
             }
             else {
-                return false; 
+                return false;
+                mysqli_close($con); 
             }
-            mysqli_close($con);
         }
     }
 ?>
