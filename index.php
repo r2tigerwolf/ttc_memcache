@@ -41,7 +41,7 @@
         $route_cache_result = $memcache->get('route_'.$_POST['route_name']);
     
         if($route_cache_result) {
-            $route_result = $route_cache_result;
+            $routeResult = $route_cache_result;
             echo "<br/>this is cached<br/>";
         } else {
             
